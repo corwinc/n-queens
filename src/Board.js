@@ -79,12 +79,30 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var found = false;
+      var row = this.get(rowIndex);
+
+      for (var i = 0; i < row.length; i++) {
+        if (found && row[i] === 1) {
+          return true;
+        } else if (row[i] === 1) {
+          found = true;
+        }
+      }
+
+      return false;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var n = this.get('n');
+      for (var i = 0; i < n; i++) {
+        if (this.hasRowConflictAt(i)) {
+          return true;
+        }
+      }
+
+      return false;
     },
 
 
@@ -94,12 +112,32 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var numCols = this.get('n');
+      var found1 = false;
+
+      for (var i = 0; i < numCols; i++) {
+        var colVal = this.get(i)[colIndex];
+        if (colVal === 1 && found1) {
+          return true;
+        } else if (colVal === 1) {
+          found1 = true;
+        }
+      }
+
+      return false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var numCols = this.get('n');
+
+      for (var i = 0; i < numCols; i++) {
+        if (this.hasColConflictAt(i)) {
+          return true;
+        }
+      }
+
+      return false;
     },
 
 
@@ -109,7 +147,18 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var n = this.get('n');
+      // helper function: do diagonal checks
+      var hasMajorConflict = function (row, index) {
+
+      }
+      // Loop 1: start at row[n-1], iterate through rows
+      // Loop 2: start at row[0][1] and iterate thru row items
+
+
+      // Catch edge cases: small n's
+
+      return false;
     },
 
     // test if any major diagonals on this board contain conflicts
