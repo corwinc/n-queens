@@ -16,11 +16,34 @@
 
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  // var myBoard = new Board({'n': n});  //create a new board of N size to work with
+  // var numPlaced = 0;  //keep track of how many rooks have been placed without conflict
+  // var getRandomIndex = function() {  //make random number generator
+  //   return Math.floor(Math.random() * n);  //get random x and y values
+  // };
 
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
+  // var placeAnX = function() {
+  //   var xCoord = getRandomIndex();
+  //   var yCoord = getRandomIndex();  //need to optimize here --> if the pair has been checked already, generate new pair
+  //   if (myBoard.get(xCoord)[yCoord] === 0) {  //check to see if there is an x there already
+  //     myBoard.set(xCoord)[yCoord] = 1;  //if not, make it a rook
+  //   }
+  //   if (myBoard.hasAnyRowConflicts() || myBoard.hasAnyColConflicts) {  //if any conflicts, undo rook placement
+  //     myBoard.set(xCoord)[yCoord] = 0;
+  //   } else {  //otherwise, leave the rook, and increment num placed
+  //     numPlaced++;
+  //   }
+  // };
+
+  // while (numPlaced < n) {  //as long as we haven't placed N rooks, keep trying to place an X
+  //   placeAnX();
+  // }
+
+  //at this point we've place N rooks so we have found a solution
+  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(myBoard));
+  return myBoard;
 };
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
