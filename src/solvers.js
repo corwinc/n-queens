@@ -93,9 +93,9 @@ window.countNRooksSolutions = function(n) {
   var badAttempts = 0;
 
   // while badAttempts < 2000;
-  while (badAttempts < 2000) {
+  while (badAttempts < 15000) {
     // var currentSolution =  findNRooksSolution() & each time save result
-    var currentSolution = JSON.stringify(findNRooksSolution());
+    var currentSolution = JSON.stringify(findNRooksSolution(n));
     // run check to see if currentSolution is in uniqueSolutions
     if (uniqueSolutions[currentSolution]) {
       badAttempts++;
