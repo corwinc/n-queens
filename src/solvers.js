@@ -50,16 +50,16 @@ window.findNRooksSolution = function(n) {
   };
 
   var placeAnX = function() {
-    debugger;
+    // debugger;
     var xCoord = getRandomIndex();
     var yCoord = getRandomIndex();  //need to optimize here --> if the pair has been checked already, generate new pair
+    var ogRow = myBoard.get(xCoord);
+    var newRow = ogRow.slice();
     if (myBoard.get(xCoord)[yCoord] === 0) {  //check to see if there is an x there already
-      var ogRow = myBoard.get(xCoord);
-      var newRow = Array.prototype.splice.apply(ogRow);
       newRow[yCoord] = 1;
       myBoard.set(xCoord, newRow);
     }
-    if (myBoard.hasAnyRowConflicts() || myBoard.hasAnyColConflicts()) {  //if any conflicts, undo rook placement
+    if (ogRow[yCoord] === 1 || myBoard.hasAnyRowConflicts() || myBoard.hasAnyColConflicts()) {  //if any conflicts, undo rook placement
       myBoard.set(xCoord, ogRow);
     } else {  //otherwise, leave the rook, and increment num placed
       numPlaced++;
@@ -70,13 +70,13 @@ window.findNRooksSolution = function(n) {
     placeAnX();
   }
 
-  for (var i = 0; i < test.attributes.n; i++) {
-    solution.push(test.attributes[i]);
-  }
+  // for (var i = 0; i < myBoard.attributes.n; i++) {
+  //   solution.push(myBoard.attributes[i]);
+  // }
 
   //at this point we've place N rooks so we have found a solution
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(myBoard));
-  return solution;
+  return myBoard.rows();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
