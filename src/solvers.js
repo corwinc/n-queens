@@ -15,74 +15,95 @@
 
 
 window.findNRooksSolution = function(n) {
-  var myBoard = new Board({n: n});  //create a new board of N size to work with
-  var numPlaced = 0;  //keep track of how many rooks have been placed without conflict
-  var solution = [];
-  var squaresChecked = {};
-  var getRandomIndex = function() {  //make random number generator
-    return Math.floor(Math.random() * n);  //get random x and y values
+  var findNextEmptyRow = function(board) {
+    for (var i = 0; i < n; i++) {
+      for (var j = 0; j < n; j++) {
+        if (board.rows()[i][j] === 1) {
+          break; 
+        } else if (j === n - 1 && board.rows()[i][j] === 0) {
+          return i;
+        }
+      } 
+    }
+
+    return undefined;
   };
 
-  var placeAnX = function() {
-    // debugger;
-    var xCoord = getRandomIndex();
-    var yCoord = getRandomIndex();  //need to optimize here --> if the pair has been checked already, generate new pair
-    var pair = JSON.stringify([xCoord, yCoord]);
-    if (squaresChecked.hasOwnProperty(pair)) {
-      placeAnX();
+  var findSolution = function (board, placedCount) {
+    debugger;
+    if (board.hasAnyRowConflicts() || board.hasAnyColConflicts()) {
+      // do nothing
     } else {
-      squaresChecked[pair] = true;
+      if (placedCount === n) {
+        return board.rows();
+      } else {
+        var nextRowIndex = findNextEmptyRow(board);
+        if (nextRowIndex !== undefined) {
+          var nextRow = board.get(nextRowIndex);
+          for (var i = 0; i < n; i++) {
+            board.togglePiece(nextRow, i);
+            placedCount++;
+            findSolution(board, placedCount);
+          }
+        }
+      }
     }
-    var ogRow = myBoard.get(xCoord);
-    var newRow = ogRow.slice();
-    if (myBoard.get(xCoord)[yCoord] === 0) {  //check to see if there is an x there already
-      newRow[yCoord] = 1;
-      myBoard.set(xCoord, newRow);
-    }
-    if (ogRow[yCoord] === 1 || myBoard.hasAnyRowConflicts() || myBoard.hasAnyColConflicts()) {  //if any conflicts, undo rook placement
-      myBoard.set(xCoord, ogRow);
-    } else {  //otherwise, leave the rook, and increment num placed
-      numPlaced++;
-    }
+
   };
 
-  while (numPlaced < n) {  //as long as we haven't placed N rooks, keep trying to place an X
-    placeAnX();
-  }
+  var board = new Board({n: n});
+  var solution = findSolution(board, 0);
 
-  //at this point we've place N rooks so we have found a solution
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(myBoard));
-  return myBoard.rows();
+  return solution;
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = 0;
-  var uniqueSolutions = {};
-  var badAttempts = 0;
+  var finalCount = 0;
 
-  // while badAttempts < 2000;
-  while (badAttempts < 15000) {
-    // var currentSolution =  findNRooksSolution() & each time save result
-    var currentSolution = JSON.stringify(findNRooksSolution(n));
-    // run check to see if currentSolution is in uniqueSolutions
-    if (uniqueSolutions[currentSolution]) {
-      badAttempts++;
-    } else {
-      uniqueSolutions[currentSolution] = true;
-      badAttempts = 0;
+  var findNextEmptyRow = function(board) {
+    for (var i = 0; i < n; i++) {
+      for (var j = 0; j < n; j++) {
+        if (board.rows()[i][j] === 1) {
+          break; 
+        } else if (j === n - 1 && board.rows()[i][j] === 0) {
+          return i;
+        }
+      } 
     }
-  }
 
-  solutionCount = Object.keys(uniqueSolutions).length;
-    
-      // if solution already exists: run again, and increment baddAttempts += 1  
-      // if not: add solution to uniqueSolutions and badAttempts = 0;
+    return undefined;
+  };
+
+  var findSolutions = function (board, placedCount) {
+    var placedCount = 0;
+
+    if (board.hasAnyRowConflicts() || board.hasAnyColConflicts()) {
+      // do nothing
+    } else {
+      if (placedCount === n) {
+        finalCount++;
+      } else {
+        var nextRowIndex = findNextEmptyRow();
+        if (nextRowIndex !== undefined) {
+          var nextRow = board.get(nextRowIndex);
+          for (var i = 0; i < n; i++) {
+            board.togglePiece(nextRow, i);
+            placedCount++;
+            findSolutions(board, placedCount);
+          }
+        }
+      }
+    }
+
+  };
+
+  var board = newBoard({n: n});
+  findSolutions(board, placedCount);
 
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solutionCount;
+  return finalCount;
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
